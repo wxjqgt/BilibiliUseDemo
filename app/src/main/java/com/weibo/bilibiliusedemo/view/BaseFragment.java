@@ -8,10 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.weibo.base.util.ViewUtil;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
 /**
  * A simple {@link Fragment} subclass.
  */

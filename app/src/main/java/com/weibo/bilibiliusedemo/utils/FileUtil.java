@@ -14,6 +14,7 @@ import com.weibo.bilibiliusedemo.MainApp;
 public class FileUtil {
 
     public static void scanVideoFile(){
+
     }
 
 }
