@@ -1,5 +1,6 @@
 package com.weibo.bilibiliusedemo.view.activitys;
 
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,7 +29,9 @@ import io.reactivex.functions.Consumer;
 
 public class MainActivity extends BaseActivity implements MainActivityContact.View {
 
+    public static final String VIDEO_PATH = "video_path";
     private MainActivityContact.Presenter presenter;
+    private List<VideoInfo> videoInfos;
     private CommonAdapter adapter;
     private RecyclerView rv_Video;
     private CoordinatorLayout coordinatorLayout;
@@ -52,6 +55,7 @@ public class MainActivity extends BaseActivity implements MainActivityContact.Vi
         adapter = new VideoDataRvAdapter(MainActivity.this, R.layout.videodata_item, videoInfos);
         rv_Video.setLayoutManager(new LinearLayoutManager(this));
         rv_Video.setAdapter(adapter);
+        this.videoInfos = videoInfos;
     }
 
     @Override
@@ -62,7 +66,11 @@ public class MainActivity extends BaseActivity implements MainActivityContact.Vi
         rv_Video.addOnItemTouchListener(new OnRecyclerViewItemClickListener(rv_Video) {
             @Override
             public void OnItemClickLitener(RecyclerView.ViewHolder viewHolder) {
-                Snackbar.make(coordinatorLayout, "position", Snackbar.LENGTH_LONG).show();
+            if (videoInfos != null && videoInfos.size() != 0){
+                Intent intent = new Intent(MainActivity.this,PlayActivity.class);
+                intent.putExtra(VIDEO_PATH,videoInfos.get(viewHolder.getAdapterPosition()).getFilePath());
+                startActivity(intent);
+            }
             }
         });
     }
@@ -73,21 +81,6 @@ public class MainActivity extends BaseActivity implements MainActivityContact.Vi
             return;
         }
         this.presenter = presenter;
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        /*if (hasFocus && Build.VERSION.SDK_INT >= 19) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }*/
     }
 
     @Override

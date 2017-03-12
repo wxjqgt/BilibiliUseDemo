@@ -49,7 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void dispos(){
-        if (disposables.size() != 0 && disposables != null) {
+        if (disposables != null && disposables.size() != 0) {
             int size = disposables.size();
             for (int i = 0; i < size; i++) {
                 Disposable disposable = disposables.get(i);
