@@ -28,6 +28,7 @@
         </activity>
         <activity
             android:name=".view.activitys.PlayActivity"
+            android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize"
             android:launchMode="singleInstance"></activity>
         <!-- 必须初始化 -->
