@@ -20,6 +20,8 @@ import java.util.Random;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.vov.vitamio.LibsChecker;
 import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.widget.MediaController;
@@ -97,7 +99,7 @@ public class PlayActivity extends BaseActivity {
         send = findView(R.id.send);
         editText = findView(R.id.edit_text);
 
-        RxView.clicks(danmakuView).subscribe(new Consumer<Object>() {
+        addToDisposList(RxView.clicks(danmakuView).subscribe(new Consumer<Object>() {
             @Override
             public void accept(@NonNull Object o) throws Exception {
                 if (operationLayout.getVisibility() == View.GONE) {
@@ -107,18 +109,29 @@ public class PlayActivity extends BaseActivity {
                     onWindowFocusChanged(true);
                 }
             }
-        });
+        }));
 
-        RxView.clicks(send).subscribe(new Consumer<Object>() {
-            @Override
-            public void accept(@NonNull Object o) throws Exception {
-                String content = editText.getText().toString();
-                if (!TextUtils.isEmpty(content)) {
-                    addDanmaku(content, true);
-                    editText.setText("");
-                }
-            }
-        });
+        addToDisposList(RxView.clicks(send)
+                .map(new Function<Object, String>() {
+                    @Override
+                    public String apply(@NonNull Object o) throws Exception {
+                        String content = editText.getText().toString();
+                        return content;
+                    }
+                })
+                .filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(@NonNull String content) throws Exception {
+                        return TextUtils.isEmpty(content);
+                    }
+                })
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(@NonNull String content) throws Exception {
+                        addDanmaku(content, true);
+                        editText.setText("");
+                    }
+                }));
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
